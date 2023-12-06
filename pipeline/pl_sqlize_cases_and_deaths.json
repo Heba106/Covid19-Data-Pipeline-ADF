@@ -20,7 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "ecdc",
+							"wildcardFolderPath": "ecdc/cases_deaths",
 							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						},
