@@ -11,6 +11,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "country-lookup.csv",
+				"folderPath": "dim-country",
 				"fileSystem": "lookup"
 			},
 			"columnDelimiter": ",",
