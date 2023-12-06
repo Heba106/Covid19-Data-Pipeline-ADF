@@ -1,0 +1,19 @@
+{
+	"name": "df_transform_hospital_admissions",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "hospitalAdmissions"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> hospitalAdmissions"
+			]
+		}
+	}
+}
