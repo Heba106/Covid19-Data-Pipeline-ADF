@@ -18,55 +18,6 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "Austria",
-				"type": "String"
-			},
-			{
-				"name": "AT",
-				"type": "String"
-			},
-			{
-				"name": "AUT",
-				"type": "String"
-			},
-			{
-				"name": "2020-W15",
-				"type": "String"
-			},
-			{
-				"name": "2020-04-05",
-				"type": "String"
-			},
-			{
-				"name": "2020-04-11",
-				"type": "String"
-			},
-			{
-				"name": "2041",
-				"type": "String"
-			},
-			{
-				"name": "12339",
-				"type": "String"
-			},
-			{
-				"name": "8858775",
-				"type": "String"
-			},
-			{
-				"name": "139.285623576623",
-				"type": "String"
-			},
-			{
-				"name": "16.5410487073507",
-				"type": "String"
-			},
-			{
-				"name": "Manual webscraping",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
