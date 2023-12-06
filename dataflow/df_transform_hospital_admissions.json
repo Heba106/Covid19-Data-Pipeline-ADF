@@ -10,6 +10,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "hospitalAdmissionSource"
+				},
+				{
+					"name": "source1"
 				}
 			],
 			"sinks": [],
@@ -31,11 +34,13 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> hospitalAdmissionSource",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source1",
 				"hospitalAdmissionSource select(mapColumn(",
 				"          country,",
 				"          indicator,",
 				"          reported_date = date,",
-				"          year_week,",
+				"          reported_year_week = year_week,",
 				"          value,",
 				"          source",
 				"     ),",
