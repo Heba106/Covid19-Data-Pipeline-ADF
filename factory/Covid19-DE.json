@@ -1,0 +1,9 @@
+{
+	"name": "Covid19-DE",
+	"location": "uaenorth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "711208be-7712-4d2c-b85d-203aeedd715a",
+		"tenantId": "08e72a2d-846a-4aa8-bbc9-176787c87d44"
+	}
+}
