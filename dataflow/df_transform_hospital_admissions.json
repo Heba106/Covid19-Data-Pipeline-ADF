@@ -26,6 +26,9 @@
 				},
 				{
 					"name": "lookupCountry"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -64,7 +67,22 @@
 				"selectReqFields, countrySource lookup(selectReqFields@country == countrySource@country,",
 				"     multiple: false,",
 				"     pickup: 'any',",
-				"     broadcast: 'auto')~> lookupCountry"
+				"     broadcast: 'auto')~> lookupCountry",
+				"lookupCountry select(mapColumn(",
+				"          country = selectReqFields@country,",
+				"          indicator,",
+				"          reported_date,",
+				"          reported_year_week,",
+				"          value,",
+				"          source,",
+				"          country = countrySource@country,",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          continent,",
+				"          population",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
