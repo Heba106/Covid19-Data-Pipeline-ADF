@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_processes_cases_deaths",
+						"referenceName": "ds_processed_cases_deaths",
 						"type": "DatasetReference"
 					},
 					"name": "casesAndDeathsSink"

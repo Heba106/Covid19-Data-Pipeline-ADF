@@ -1,9 +1,12 @@
 {
-	"name": "ds_processes_cases_deaths",
+	"name": "ds_processed_cases_deaths",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls_covid19itidl",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "processed"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
