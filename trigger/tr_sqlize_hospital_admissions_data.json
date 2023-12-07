@@ -19,7 +19,15 @@
 			"retryPolicy": {
 				"intervalInSeconds": 30
 			},
-			"dependsOn": []
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"referenceTrigger": {
+						"referenceName": "tr_process_hospital_admissions_dat",
+						"type": "TriggerReference"
+					}
+				}
+			]
 		}
 	}
 }
