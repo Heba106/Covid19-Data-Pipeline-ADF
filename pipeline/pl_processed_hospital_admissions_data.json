@@ -27,6 +27,9 @@
 				}
 			}
 		],
+		"folder": {
+			"name": "process"
+		},
 		"annotations": []
 	}
 }
