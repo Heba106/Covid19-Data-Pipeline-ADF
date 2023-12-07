@@ -13,7 +13,15 @@
 			"retryPolicy": {
 				"intervalInSeconds": 30
 			},
-			"dependsOn": []
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"referenceTrigger": {
+						"referenceName": "tri_process_cases_and_deaths_data",
+						"type": "TriggerReference"
+					}
+				}
+			]
 		}
 	}
 }
