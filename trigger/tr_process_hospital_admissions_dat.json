@@ -1,0 +1,27 @@
+{
+	"name": "tr_process_hospital_admissions_dat",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Minute",
+			"interval": 15,
+			"startTime": "2023-12-06T00:00:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"referenceTrigger": {
+						"referenceName": "tr_ingest_ecdc_data",
+						"type": "TriggerReference"
+					}
+				}
+			]
+		}
+	}
+}
