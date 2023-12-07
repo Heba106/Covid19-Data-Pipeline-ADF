@@ -176,6 +176,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "ingest"
+				},
 				"annotations": [],
 				"lastPublishTime": "2023-12-06T01:04:38Z"
 			},
@@ -385,6 +388,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "ingest"
+				},
 				"annotations": [],
 				"lastPublishTime": "2023-12-06T01:04:38Z"
 			},
@@ -434,6 +440,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "process"
+				},
 				"annotations": [],
 				"lastPublishTime": "2023-12-06T01:23:50Z"
 			},
@@ -470,6 +479,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "process"
 				},
 				"annotations": []
 			},
@@ -519,6 +531,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "process"
 				},
 				"annotations": []
 			},
@@ -577,7 +592,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_processes_cases_deaths",
+								"referenceName": "ds_processed_cases_deaths",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -594,10 +609,13 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "sqlize"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_processes_cases_deaths')]",
+				"[concat(variables('factoryId'), '/datasets/ds_processed_cases_deaths')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_cases_deaths')]"
 			]
 		},
@@ -668,6 +686,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "sqlize"
 				},
 				"annotations": []
 			},
@@ -855,6 +876,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "sqlize"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -870,6 +894,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "lookup"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -920,6 +947,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "lookup"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -999,6 +1029,9 @@
 					"referenceName": "ls_ablob_covid19itisa",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "lookup"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -1041,6 +1074,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "raw"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1078,6 +1114,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "raw"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1107,6 +1146,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_ablob_covid19itisa",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "raw"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -1138,6 +1180,9 @@
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "raw"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1167,6 +1212,9 @@
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "processed"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1194,6 +1242,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "processed"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -1223,6 +1274,9 @@
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "processed"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1243,13 +1297,16 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_processes_cases_deaths')]",
+			"name": "[concat(parameters('factoryName'), '/ds_processed_cases_deaths')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "processed"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -1278,6 +1335,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "raw"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -1345,6 +1405,9 @@
 					"referenceName": "ls_adls_covid19itidl",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "raw"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -1403,6 +1466,9 @@
 					"referenceName": "ls_sql_covid_db",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "sql"
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [
@@ -1460,6 +1526,9 @@
 					"referenceName": "ls_sql_covid_db",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "sql"
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [
@@ -1516,6 +1585,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_sql_covid_db",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sql"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -1705,7 +1777,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_processes_cases_deaths",
+								"referenceName": "ds_processed_cases_deaths",
 								"type": "DatasetReference"
 							},
 							"name": "casesAndDeathsSink"
@@ -1805,7 +1877,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_raw_cases_and_deaths')]",
 				"[concat(variables('factoryId'), '/datasets/ds_country_lookup')]",
-				"[concat(variables('factoryId'), '/datasets/ds_processes_cases_deaths')]"
+				"[concat(variables('factoryId'), '/datasets/ds_processed_cases_deaths')]"
 			]
 		},
 		{

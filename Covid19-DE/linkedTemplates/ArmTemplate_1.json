@@ -25,6 +25,9 @@
 					"referenceName": "ls_sql_covid_db",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "sql"
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [
@@ -79,6 +82,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_sql_covid_db",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sql"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -265,6 +271,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "ingest"
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-12-06T01:04:38Z"
@@ -471,6 +480,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "ingest"
+				},
 				"annotations": [],
 				"lastPublishTime": "2023-12-06T01:04:38Z"
 			},
@@ -527,7 +539,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_processes_cases_deaths",
+								"referenceName": "ds_processed_cases_deaths",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -543,6 +555,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "sqlize"
 				},
 				"annotations": []
 			},
@@ -615,6 +630,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "sqlize"
 				},
 				"annotations": []
 			},
@@ -801,6 +819,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "sqlize"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -833,7 +854,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_processes_cases_deaths",
+								"referenceName": "ds_processed_cases_deaths",
 								"type": "DatasetReference"
 							},
 							"name": "casesAndDeathsSink"
@@ -1208,6 +1229,9 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "process"
+				},
 				"annotations": [],
 				"lastPublishTime": "2023-12-06T01:23:50Z"
 			},
@@ -1257,6 +1281,9 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "process"
 				},
 				"annotations": []
 			},
