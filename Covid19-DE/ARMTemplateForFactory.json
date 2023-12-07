@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_covid_db'"
 		},
+		"ls_sql_covid_dwh_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sql_covid_dwh'"
+		},
 		"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
@@ -1777,35 +1781,17 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_ingest_ecdc_data')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
+			"name": "[concat(parameters('factoryName'), '/ls_sql_covid_dwh')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_ingest_ecdc_data",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
+				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2023-12-06T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
+					"connectionString": "[parameters('ls_sql_covid_dwh_connectionString')]"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ingest_ecdc_data')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/tr_population_data_arrived')]",
@@ -1813,7 +1799,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -1838,12 +1824,83 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_process_cases_and_deaths_data')]",
+			"name": "[concat(parameters('factoryName'), '/tri_ingest_ecdc_data')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_ingest_ecdc_data",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2023-12-07T00:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ingest_ecdc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tri_peocess_hospital_admissions_data')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "pl_processed_hospital_admissions_data",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2023-12-07T00:00:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": [
+						{
+							"type": "TumblingWindowTriggerDependencyReference",
+							"referenceTrigger": {
+								"referenceName": "tri_ingest_ecdc_data",
+								"type": "TriggerReference"
+							}
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_processed_hospital_admissions_data')]",
+				"[concat(variables('factoryId'), '/triggers/tri_ingest_ecdc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tri_process_cases_and_deaths_data')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
 				"pipeline": {
 					"pipelineReference": {
 						"referenceName": "pl_process_cases_deaths_data",
@@ -1855,7 +1912,7 @@
 				"typeProperties": {
 					"frequency": "Hour",
 					"interval": 24,
-					"startTime": "2023-12-06T00:00:00Z",
+					"startTime": "2023-12-07T00:00:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 50,
 					"retryPolicy": {
@@ -1865,7 +1922,7 @@
 						{
 							"type": "TumblingWindowTriggerDependencyReference",
 							"referenceTrigger": {
-								"referenceName": "tr_ingest_ecdc_data",
+								"referenceName": "tri_ingest_ecdc_data",
 								"type": "TriggerReference"
 							}
 						}
@@ -1874,56 +1931,16 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_process_cases_deaths_data')]",
-				"[concat(variables('factoryId'), '/triggers/tr_ingest_ecdc_data')]"
+				"[concat(variables('factoryId'), '/triggers/tri_ingest_ecdc_data')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_process_hospital_admissions_dat')]",
+			"name": "[concat(parameters('factoryName'), '/tri_sqlize_cases_and_deaths_data')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_processed_hospital_admissions_data",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Minute",
-					"interval": 15,
-					"startTime": "2023-12-06T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": [
-						{
-							"type": "TumblingWindowTriggerDependencyReference",
-							"referenceTrigger": {
-								"referenceName": "tr_ingest_ecdc_data",
-								"type": "TriggerReference"
-							}
-						}
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_processed_hospital_admissions_data')]",
-				"[concat(variables('factoryId'), '/triggers/tr_ingest_ecdc_data')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_sqlize_casses_and_deaths_data')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipeline": {
 					"pipelineReference": {
 						"referenceName": "pl_sqlize_cases_and_deaths",
@@ -1933,9 +1950,9 @@
 				},
 				"type": "TumblingWindowTrigger",
 				"typeProperties": {
-					"frequency": "Minute",
+					"frequency": "Hour",
 					"interval": 24,
-					"startTime": "2023-12-06T00:00:00Z",
+					"startTime": "2023-12-07T00:00:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 50,
 					"retryPolicy": {
@@ -1945,7 +1962,7 @@
 						{
 							"type": "TumblingWindowTriggerDependencyReference",
 							"referenceTrigger": {
-								"referenceName": "tr_process_cases_and_deaths_data",
+								"referenceName": "tri_process_cases_and_deaths_data",
 								"type": "TriggerReference"
 							}
 						}
@@ -1954,16 +1971,16 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_sqlize_cases_and_deaths')]",
-				"[concat(variables('factoryId'), '/triggers/tr_process_cases_and_deaths_data')]"
+				"[concat(variables('factoryId'), '/triggers/tri_process_cases_and_deaths_data')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_sqlize_hospital_admissions_data')]",
+			"name": "[concat(parameters('factoryName'), '/tri_sqlize_hospital_admissions_data')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipeline": {
 					"pipelineReference": {
 						"referenceName": "pl_sqlize_hospital_admissions_daily_data",
@@ -1973,9 +1990,9 @@
 				},
 				"type": "TumblingWindowTrigger",
 				"typeProperties": {
-					"frequency": "Minute",
+					"frequency": "Hour",
 					"interval": 24,
-					"startTime": "2023-12-06T00:00:00Z",
+					"startTime": "2023-12-07T00:00:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 50,
 					"retryPolicy": {
@@ -1985,7 +2002,7 @@
 						{
 							"type": "TumblingWindowTriggerDependencyReference",
 							"referenceTrigger": {
-								"referenceName": "tr_process_hospital_admissions_dat",
+								"referenceName": "tri_peocess_hospital_admissions_data",
 								"type": "TriggerReference"
 							}
 						}
@@ -1994,7 +2011,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_sqlize_hospital_admissions_daily_data')]",
-				"[concat(variables('factoryId'), '/triggers/tr_process_hospital_admissions_dat')]"
+				"[concat(variables('factoryId'), '/triggers/tri_peocess_hospital_admissions_data')]"
 			]
 		},
 		{

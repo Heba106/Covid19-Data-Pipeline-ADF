@@ -17,6 +17,9 @@
 		"ls_sql_covid_db_connectionString": {
 			"value": ""
 		},
+		"ls_sql_covid_dwh_connectionString": {
+			"value": ""
+		},
 		"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
 		},

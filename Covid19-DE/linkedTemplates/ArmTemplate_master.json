@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_covid_db'"
 		},
+		"ls_sql_covid_dwh_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sql_covid_dwh'"
+		},
 		"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
@@ -77,6 +81,9 @@
 					},
 					"ls_sql_covid_db_connectionString": {
 						"value": "[parameters('ls_sql_covid_db_connectionString')]"
+					},
+					"ls_sql_covid_dwh_connectionString": {
+						"value": "[parameters('ls_sql_covid_dwh_connectionString')]"
 					},
 					"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 						"value": "[parameters('Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url')]"
