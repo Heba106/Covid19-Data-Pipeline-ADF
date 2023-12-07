@@ -16,11 +16,22 @@
 				}
 			},
 			{
-				"name": "Execute Process",
+				"name": "Execute Process Population Data On DataBrocks",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Execute Ingest Population Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_process_population_data",
+						"type": "PipelineReference"
+					},
 					"waitOnCompletion": true
 				}
 			}
