@@ -5,6 +5,9 @@
 			"referenceName": "ls_adls_covid19itidl",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "lookup"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
