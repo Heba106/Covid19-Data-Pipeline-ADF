@@ -140,8 +140,7 @@
 							{
 								"source": {
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 12
+									"ordinal": 10
 								},
 								"sink": {
 									"name": "testing_data_source",
