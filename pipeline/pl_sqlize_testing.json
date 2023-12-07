@@ -15,6 +15,18 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
 					"sink": {
 						"type": "AzureSqlSink",
 						"preCopyScript": "TRUNCATE TABLE covid_reporting.testing;",
@@ -28,107 +40,128 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "Austria",
-									"type": "String"
+									"type": "String",
+									"ordinal": 1
 								},
 								"sink": {
 									"name": "country",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
 								"source": {
-									"name": "AT",
-									"type": "String"
+									"type": "String",
+									"ordinal": 2
 								},
 								"sink": {
 									"name": "country_code_2_digit",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
 								"source": {
-									"name": "AUT",
-									"type": "String"
+									"type": "String",
+									"ordinal": 3
 								},
 								"sink": {
 									"name": "country_code_3_digit",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
 								"source": {
-									"name": "2020-W15",
-									"type": "String"
+									"type": "String",
+									"ordinal": 4
 								},
 								"sink": {
 									"name": "year_week",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							},
 							{
 								"source": {
-									"name": "2020-04-05",
-									"type": "String"
+									"type": "String",
+									"ordinal": 5
 								},
 								"sink": {
 									"name": "week_start_date",
-									"type": "DateTime"
+									"type": "DateTime",
+									"physicalType": "date"
 								}
 							},
 							{
 								"source": {
-									"name": "2020-04-11",
-									"type": "String"
+									"type": "String",
+									"ordinal": 6
 								},
 								"sink": {
 									"name": "week_end_date",
-									"type": "DateTime"
+									"type": "DateTime",
+									"physicalType": "date"
 								}
 							},
 							{
 								"source": {
-									"name": "2041",
-									"type": "String"
+									"type": "String",
+									"ordinal": 7
 								},
 								"sink": {
 									"name": "new_cases",
-									"type": "Int64"
+									"type": "Int64",
+									"physicalType": "bigint"
 								}
 							},
 							{
 								"source": {
-									"name": "12339",
-									"type": "String"
+									"type": "String",
+									"ordinal": 8
 								},
 								"sink": {
 									"name": "tests_done",
-									"type": "Int64"
+									"type": "Int64",
+									"physicalType": "bigint"
 								}
 							},
 							{
 								"source": {
-									"name": "8858775",
-									"type": "String"
+									"type": "String",
+									"ordinal": 9
 								},
 								"sink": {
 									"name": "population",
-									"type": "Int64"
+									"type": "Int64",
+									"physicalType": "bigint"
 								}
 							},
 							{
 								"source": {
-									"name": "139.285623576623",
-									"type": "String"
+									"type": "String",
+									"ordinal": 10
 								},
 								"sink": {
 									"name": "testing_data_source",
-									"type": "String"
+									"type": "String",
+									"physicalType": "varchar"
 								}
 							}
-						]
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
 				},
+				"inputs": [
+					{
+						"referenceName": "ds_processed_testing",
+						"type": "DatasetReference"
+					}
+				],
 				"outputs": [
 					{
 						"referenceName": "ds_sql_testing",
