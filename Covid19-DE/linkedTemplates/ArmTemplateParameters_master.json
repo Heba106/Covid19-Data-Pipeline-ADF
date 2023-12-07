@@ -26,7 +26,7 @@
 		"ls_db_covid_cluster_properties_typeProperties_existingClusterId": {
 			"value": "1206-212628-ffud3dgx"
 		},
-		"tr_ingest_population_data_properties_typeProperties_scope": {
+		"tr_population_data_arrived_properties_typeProperties_scope": {
 			"value": "/subscriptions/9ef7084d-1000-4031-b8cb-9ccdc1a3f173/resourceGroups/Covid19/providers/Microsoft.Storage/storageAccounts/covid19itisa"
 		},
 		"containerUri": {
