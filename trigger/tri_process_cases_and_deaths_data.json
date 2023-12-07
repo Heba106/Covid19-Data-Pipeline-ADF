@@ -21,11 +21,7 @@
 			},
 			"dependsOn": [
 				{
-					"type": "TumblingWindowTriggerDependencyReference",
-					"referenceTrigger": {
-						"referenceName": "tri_ingest_ecdc_data",
-						"type": "TriggerReference"
-					}
+					"type": "SelfDependencyTumblingWindowTriggerReference"
 				}
 			]
 		}
