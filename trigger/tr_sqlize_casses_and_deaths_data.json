@@ -1,0 +1,27 @@
+{
+	"name": "tr_sqlize_casses_and_deaths_data",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Minute",
+			"interval": 24,
+			"startTime": "2023-12-06T00:00:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"referenceTrigger": {
+						"referenceName": "tr_process_cases_and_deaths_data",
+						"type": "TriggerReference"
+					}
+				}
+			]
+		}
+	}
+}
