@@ -2,7 +2,7 @@
 	"name": "tr_sqlize_hospital_admissions_data",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "pl_sqlize_hospital_admissions_daily_data",
@@ -19,11 +19,7 @@
 			"retryPolicy": {
 				"intervalInSeconds": 30
 			},
-			"dependsOn": [
-				{
-					"type": "SelfDependencyTumblingWindowTriggerReference"
-				}
-			]
+			"dependsOn": []
 		}
 	}
 }
