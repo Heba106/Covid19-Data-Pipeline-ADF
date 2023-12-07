@@ -14,17 +14,20 @@
 		"ls_db_covid_cluster_accessToken": {
 			"value": ""
 		},
+		"ls_sql_covid_db_connectionString": {
+			"value": ""
+		},
 		"Is_http_opendata_ecdc_europa_eu_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
 		},
 		"ls_adls_covid19itidl_properties_typeProperties_url": {
 			"value": "https://covid19itidl.dfs.core.windows.net/"
 		},
-		"tr_ingest_population_data_properties_typeProperties_scope": {
-			"value": "/subscriptions/9ef7084d-1000-4031-b8cb-9ccdc1a3f173/resourceGroups/Covid19/providers/Microsoft.Storage/storageAccounts/covid19itisa"
-		},
 		"ls_db_covid_cluster_properties_typeProperties_existingClusterId": {
 			"value": "1206-212628-ffud3dgx"
+		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"value": "/subscriptions/9ef7084d-1000-4031-b8cb-9ccdc1a3f173/resourceGroups/Covid19/providers/Microsoft.Storage/storageAccounts/covid19itisa"
 		}
 	}
 }
