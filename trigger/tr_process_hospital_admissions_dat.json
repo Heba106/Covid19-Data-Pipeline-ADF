@@ -2,7 +2,7 @@
 	"name": "tr_process_hospital_admissions_dat",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "pl_processed_hospital_admissions_data",
