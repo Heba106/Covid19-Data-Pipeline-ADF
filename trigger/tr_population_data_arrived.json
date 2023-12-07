@@ -2,7 +2,7 @@
 	"name": "tr_population_data_arrived",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
