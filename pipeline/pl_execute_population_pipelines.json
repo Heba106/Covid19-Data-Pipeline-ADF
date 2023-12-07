@@ -3,7 +3,20 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute",
+				"name": "Execute Ingest Population Data",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_ingest_population_data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute Process",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"userProperties": [],
