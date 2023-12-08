@@ -6,16 +6,196 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "Covid19-DE"
-		},
-		"tr_population_data_arrived_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/9ef7084d-1000-4031-b8cb-9ccdc1a3f173/resourceGroups/Covid19/providers/Microsoft.Storage/storageAccounts/covid19itisa"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_processed_hospital_admissions_weekly')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_covid19itidl",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "processed"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "ecdc/hospital_admissions_weekly",
+						"fileSystem": "processed"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_processed_testing')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_covid19itidl",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "processed"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "ecdc/testing",
+						"fileSystem": "processed"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_raw_cases_and_deaths')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_covid19itidl",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "raw"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "cases_deaths.csv",
+						"folderPath": "ecdc/cases_deaths",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "country",
+						"type": "String"
+					},
+					{
+						"name": "country_code",
+						"type": "String"
+					},
+					{
+						"name": "continent",
+						"type": "String"
+					},
+					{
+						"name": "population",
+						"type": "String"
+					},
+					{
+						"name": "indicator",
+						"type": "String"
+					},
+					{
+						"name": "daily_count",
+						"type": "String"
+					},
+					{
+						"name": "date",
+						"type": "String"
+					},
+					{
+						"name": "rate_14_day",
+						"type": "String"
+					},
+					{
+						"name": "source",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_raw_hospital_admission')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_covid19itidl",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "raw"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "hospital_admissions.csv",
+						"folderPath": "ecdc/hospital_admissions",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "country",
+						"type": "String"
+					},
+					{
+						"name": "indicator",
+						"type": "String"
+					},
+					{
+						"name": "date",
+						"type": "String"
+					},
+					{
+						"name": "year_week",
+						"type": "String"
+					},
+					{
+						"name": "value",
+						"type": "String"
+					},
+					{
+						"name": "source",
+						"type": "String"
+					},
+					{
+						"name": "url",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_sql_cases_deaths')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -194,6 +374,67 @@
 				"typeProperties": {
 					"schema": "covid_reporting",
 					"table": "testing"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_testing_dwh')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_covid_dwh",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DWH"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "testing_skey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "testing_country",
+						"type": "varchar"
+					},
+					{
+						"name": "testing_country_code_2_digit",
+						"type": "varchar"
+					},
+					{
+						"name": "testing_country_code_3_digit",
+						"type": "varchar"
+					},
+					{
+						"name": "population",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "year_week",
+						"type": "varchar"
+					},
+					{
+						"name": "week_start_date",
+						"type": "date"
+					},
+					{
+						"name": "week_end_date",
+						"type": "date"
+					},
+					{
+						"name": "testing_data_source",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "dim_testing"
 				}
 			},
 			"dependsOn": []
@@ -885,7 +1126,358 @@
 				"annotations": []
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_processed_testing')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_testing')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_etl_dwh')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_cases_deaths",
+								"type": "DatasetReference"
+							},
+							"name": "CasesDB"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_hospital_admissions_daily",
+								"type": "DatasetReference"
+							},
+							"name": "HospitalDB"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_testing",
+								"type": "DatasetReference"
+							},
+							"name": "TestingDB"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_dimdate_dwh",
+								"type": "DatasetReference"
+							},
+							"name": "DimDateDWH"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_hospital_dwh",
+								"type": "DatasetReference"
+							},
+							"name": "HospitalDWH"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_cases_dwh",
+								"type": "DatasetReference"
+							},
+							"name": "CasesDWH"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_testing_dwh",
+								"type": "DatasetReference"
+							},
+							"name": "TestingDWH"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_fact_dwh",
+								"type": "DatasetReference"
+							},
+							"name": "FactsDWH"
+						}
+					],
+					"transformations": [
+						{
+							"name": "CasesSkey"
+						},
+						{
+							"name": "HospitalSkey"
+						},
+						{
+							"name": "TestingSkey"
+						},
+						{
+							"name": "CaseHospitalJoin"
+						},
+						{
+							"name": "TestingJoinCaseHospital"
+						},
+						{
+							"name": "FullSelect"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          country as string,",
+						"          country_code_2_digit as string,",
+						"          country_code_3_digit as string,",
+						"          population as long,",
+						"          cases_count as long,",
+						"          deaths_count as long,",
+						"          reported_date as date,",
+						"          source as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> CasesDB",
+						"source(output(",
+						"          country as string,",
+						"          country_code_2_digit as string,",
+						"          country_code_3_digit as string,",
+						"          population as long,",
+						"          reported_date as date,",
+						"          hospital_occupancy_count as long,",
+						"          icu_occupancy_count as long,",
+						"          source as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> HospitalDB",
+						"source(output(",
+						"          country as string,",
+						"          country_code_2_digit as string,",
+						"          country_code_3_digit as string,",
+						"          year_week as string,",
+						"          week_start_date as date,",
+						"          week_end_date as date,",
+						"          new_cases as long,",
+						"          tests_done as long,",
+						"          population as long,",
+						"          testing_data_source as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> TestingDB",
+						"source(output(",
+						"          DateSK as integer,",
+						"          Date as date,",
+						"          Day as string,",
+						"          DaySuffix as string,",
+						"          DayOfWeek as string,",
+						"          DOWInMonth as integer,",
+						"          DayOfYear as integer,",
+						"          WeekOfYear as integer,",
+						"          WeekOfMonth as integer,",
+						"          Month as string,",
+						"          MonthName as string,",
+						"          Quarter as integer,",
+						"          QuarterName as string,",
+						"          Year as string,",
+						"          StandardDate as string,",
+						"          HolidayText as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> DimDateDWH",
+						"CasesDB keyGenerate(output(cases_skey as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> CasesSkey",
+						"HospitalDB keyGenerate(output(hospital_skey as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> HospitalSkey",
+						"TestingDB keyGenerate(output(testing_skey as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> TestingSkey",
+						"CasesSkey, HospitalSkey join(CasesDB@reported_date == HospitalDB@reported_date",
+						"     && CasesDB@country == HospitalDB@country,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> CaseHospitalJoin",
+						"TestingSkey, CaseHospitalJoin join(TestingDB@country == CasesDB@country",
+						"     && week_start_date <= CasesDB@reported_date",
+						"     && week_end_date >= CasesDB@reported_date,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'right')~> TestingJoinCaseHospital",
+						"TestingJoinCaseHospital select(mapColumn(",
+						"          hospital_skey,",
+						"          testing_skey,",
+						"          cases_skey,",
+						"          new_cases,",
+						"          tests_done,",
+						"          cases_count,",
+						"          deaths_count,",
+						"          hospital_occupancy_count,",
+						"          icu_occupancy_count,",
+						"          reported_date = CasesDB@reported_date",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> FullSelect",
+						"DimDateDWH, TestingJoinCaseHospital join(Date == CasesDB@reported_date,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 select(mapColumn(",
+						"          DateSK,",
+						"          testing_skey,",
+						"          cases_skey,",
+						"          hospital_skey,",
+						"          new_cases,",
+						"          tests_done,",
+						"          cases_count,",
+						"          deaths_count,",
+						"          hospital_occupancy_count,",
+						"          icu_occupancy_count",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"HospitalSkey sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          hospital_skey as integer,",
+						"          hospital_country as string,",
+						"          hospital_country_code_2_digit as string,",
+						"          hospital_country_code_3_digit as string,",
+						"          population as long,",
+						"          hospital_data_source as string,",
+						"          reported_date as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 2,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          hospital_skey,",
+						"          hospital_country = country,",
+						"          hospital_country_code_2_digit = country_code_2_digit,",
+						"          hospital_country_code_3_digit = country_code_3_digit,",
+						"          population,",
+						"          hospital_data_source = source,",
+						"          reported_date",
+						"     )) ~> HospitalDWH",
+						"CasesSkey sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          cases_skey as integer,",
+						"          cases_country as string,",
+						"          cases_country_code_2_digit as string,",
+						"          cases_country_code_3_digit as string,",
+						"          population as long,",
+						"          cases_and_death_data_source as string,",
+						"          reported_date as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          cases_skey,",
+						"          cases_country = country,",
+						"          cases_country_code_2_digit = country_code_2_digit,",
+						"          cases_country_code_3_digit = country_code_3_digit,",
+						"          population,",
+						"          cases_and_death_data_source = source,",
+						"          reported_date",
+						"     )) ~> CasesDWH",
+						"TestingSkey sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          testing_skey as integer,",
+						"          testing_country as string,",
+						"          testing_country_code_2_digit as string,",
+						"          testing_country_code_3_digit as string,",
+						"          population as long,",
+						"          year_week as string,",
+						"          week_start_date as date,",
+						"          week_end_date as date,",
+						"          testing_data_source as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 3,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          testing_skey,",
+						"          testing_country = country,",
+						"          testing_country_code_2_digit = country_code_2_digit,",
+						"          testing_country_code_3_digit = country_code_3_digit,",
+						"          population,",
+						"          week_start_date,",
+						"          week_end_date,",
+						"          testing_data_source",
+						"     )) ~> TestingDWH",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          DateSK as integer,",
+						"          cases_skey as integer,",
+						"          hospital_skey as integer,",
+						"          testing_skey as integer,",
+						"          cases_count as long,",
+						"          deaths_count as long,",
+						"          hospital_occupancy_count as long,",
+						"          icu_occupancy_count as long,",
+						"          new_cases as long,",
+						"          tests_done as long",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 4,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          DateSK,",
+						"          cases_skey,",
+						"          hospital_skey,",
+						"          testing_skey,",
+						"          cases_count,",
+						"          deaths_count,",
+						"          hospital_occupancy_count,",
+						"          icu_occupancy_count,",
+						"          new_cases,",
+						"          tests_done",
+						"     )) ~> FactsDWH"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_cases_deaths')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_hospital_admissions_daily')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_testing')]",
+				"[concat(variables('factoryId'), '/datasets/ds_testing_dwh')]"
 			]
 		},
 		{
@@ -1011,7 +1603,9 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_raw_cases_and_deaths')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/df_transform_hospital_admissions')]",
@@ -1246,7 +1840,65 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_raw_hospital_admission')]",
+				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_admissions_weekly')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_dwh')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_etl_dwh",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"CasesDB": {},
+									"HospitalDB": {},
+									"TestingDB": {},
+									"DimDateDWH": {},
+									"HospitalDWH": {},
+									"CasesDWH": {},
+									"TestingDWH": {},
+									"FactsDWH": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Data Warehouse"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_etl_dwh')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_execute_population_pipelines')]",
@@ -1403,227 +2055,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/df_transform_hospital_admissions')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_ingest_ecdc')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_ingest_ecdc_data",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2023-12-07T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ingest_ecdc_data')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_population_data_arrived')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_execute_population_pipelines",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/population/blobs/population-by-age.tsv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('tr_population_data_arrived_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_execute_population_pipelines')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_process_cases')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_process_cases_deaths_data",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2023-12-07T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": [
-						{
-							"type": "TumblingWindowTriggerDependencyReference",
-							"referenceTrigger": {
-								"referenceName": "tr_ingest_ecdc",
-								"type": "TriggerReference"
-							}
-						}
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_process_cases_deaths_data')]",
-				"[concat(variables('factoryId'), '/triggers/tr_ingest_ecdc')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_process_hospital')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_processed_hospital_admissions_data",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2023-12-07T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": [
-						{
-							"type": "TumblingWindowTriggerDependencyReference",
-							"referenceTrigger": {
-								"referenceName": "tr_ingest_ecdc",
-								"type": "TriggerReference"
-							}
-						}
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_processed_hospital_admissions_data')]",
-				"[concat(variables('factoryId'), '/triggers/tr_ingest_ecdc')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_sql_cases')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_sqlize_cases_and_deaths",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2023-12-07T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": [
-						{
-							"type": "TumblingWindowTriggerDependencyReference",
-							"referenceTrigger": {
-								"referenceName": "tr_process_cases",
-								"type": "TriggerReference"
-							}
-						}
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_sqlize_cases_and_deaths')]",
-				"[concat(variables('factoryId'), '/triggers/tr_process_cases')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_sql_hospitals')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "pl_sqlize_hospital_admissions_daily_data",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2023-12-07T00:00:00Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": [
-						{
-							"type": "TumblingWindowTriggerDependencyReference",
-							"referenceTrigger": {
-								"referenceName": "tr_process_hospital",
-								"type": "TriggerReference"
-							}
-						}
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_sqlize_hospital_admissions_daily_data')]",
-				"[concat(variables('factoryId'), '/triggers/tr_process_hospital')]"
 			]
 		}
 	]
