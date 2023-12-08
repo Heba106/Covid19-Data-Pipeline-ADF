@@ -1,0 +1,50 @@
+{
+	"name": "ds_hospital_dwh",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_covid_dwh",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWH"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "hospital_skey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "hospital_country",
+				"type": "varchar"
+			},
+			{
+				"name": "hospital_country_code_2_digit",
+				"type": "varchar"
+			},
+			{
+				"name": "hospital_country_code_3_digit",
+				"type": "varchar"
+			},
+			{
+				"name": "population",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "hospital_data_source",
+				"type": "varchar"
+			},
+			{
+				"name": "reported_date",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "dim_hospital_admissions_daily"
+		}
+	}
+}

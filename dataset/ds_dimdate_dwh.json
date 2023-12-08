@@ -1,0 +1,87 @@
+{
+	"name": "ds_dimdate_dwh",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_covid_dwh",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DateSK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Date",
+				"type": "date"
+			},
+			{
+				"name": "Day",
+				"type": "char"
+			},
+			{
+				"name": "DaySuffix",
+				"type": "varchar"
+			},
+			{
+				"name": "DayOfWeek",
+				"type": "varchar"
+			},
+			{
+				"name": "DOWInMonth",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "DayOfYear",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "WeekOfYear",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "WeekOfMonth",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "Month",
+				"type": "char"
+			},
+			{
+				"name": "MonthName",
+				"type": "varchar"
+			},
+			{
+				"name": "Quarter",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "QuarterName",
+				"type": "varchar"
+			},
+			{
+				"name": "Year",
+				"type": "char"
+			},
+			{
+				"name": "StandardDate",
+				"type": "varchar"
+			},
+			{
+				"name": "HolidayText",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DimDate"
+		}
+	}
+}

@@ -1,0 +1,50 @@
+{
+	"name": "ds_cases_dwh",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_covid_dwh",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWH"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "cases_skey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cases_country",
+				"type": "varchar"
+			},
+			{
+				"name": "cases_country_code_2_digit",
+				"type": "varchar"
+			},
+			{
+				"name": "cases_country_code_3_digit",
+				"type": "varchar"
+			},
+			{
+				"name": "population",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "cases_and_death_data_source",
+				"type": "varchar"
+			},
+			{
+				"name": "reported_date",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "dim_cases_and_death"
+		}
+	}
+}

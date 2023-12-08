@@ -1,0 +1,70 @@
+{
+	"name": "ds_fact_dwh",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_covid_dwh",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWH"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DateSK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cases_skey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "hospital_skey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "testing_skey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cases_count",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "deaths_count",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "hospital_occupancy_count",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "icu_occupancy_count",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "new_cases",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "tests_done",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "fact_combined"
+		}
+	}
+}

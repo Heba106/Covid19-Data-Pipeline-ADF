@@ -1,0 +1,58 @@
+{
+	"name": "ds_testing_dwh",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_covid_dwh",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DWH"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "testing_skey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "testing_country",
+				"type": "varchar"
+			},
+			{
+				"name": "testing_country_code_2_digit",
+				"type": "varchar"
+			},
+			{
+				"name": "testing_country_code_3_digit",
+				"type": "varchar"
+			},
+			{
+				"name": "population",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "year_week",
+				"type": "varchar"
+			},
+			{
+				"name": "week_start_date",
+				"type": "date"
+			},
+			{
+				"name": "week_end_date",
+				"type": "date"
+			},
+			{
+				"name": "testing_data_source",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "dim_testing"
+		}
+	}
+}
