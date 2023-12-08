@@ -1,0 +1,270 @@
+{
+	"name": "df_etl_dwh_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_cases_deaths",
+						"type": "DatasetReference"
+					},
+					"name": "CasesDB"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_hospital_admissions_daily",
+						"type": "DatasetReference"
+					},
+					"name": "HospitalDB"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_testing",
+						"type": "DatasetReference"
+					},
+					"name": "TestingDB"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dimdate_dwh",
+						"type": "DatasetReference"
+					},
+					"name": "DimDateDWH"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_testing_dwh",
+						"type": "DatasetReference"
+					},
+					"name": "TestingDWH"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_fact_dwh",
+						"type": "DatasetReference"
+					},
+					"name": "FactsDWH"
+				}
+			],
+			"transformations": [
+				{
+					"name": "CasesSkey"
+				},
+				{
+					"name": "HospitalSkey"
+				},
+				{
+					"name": "TestingSkey"
+				},
+				{
+					"name": "CaseHospitalJoin"
+				},
+				{
+					"name": "TestingJoinCaseHospital"
+				},
+				{
+					"name": "FullSelect"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          population as long,",
+				"          cases_count as long,",
+				"          deaths_count as long,",
+				"          reported_date as date,",
+				"          source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> CasesDB",
+				"source(output(",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          population as long,",
+				"          reported_date as date,",
+				"          hospital_occupancy_count as long,",
+				"          icu_occupancy_count as long,",
+				"          source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> HospitalDB",
+				"source(output(",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          year_week as string,",
+				"          week_start_date as date,",
+				"          week_end_date as date,",
+				"          new_cases as long,",
+				"          tests_done as long,",
+				"          population as long,",
+				"          testing_data_source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> TestingDB",
+				"source(output(",
+				"          DateSK as integer,",
+				"          Date as date,",
+				"          Day as string,",
+				"          DaySuffix as string,",
+				"          DayOfWeek as string,",
+				"          DOWInMonth as integer,",
+				"          DayOfYear as integer,",
+				"          WeekOfYear as integer,",
+				"          WeekOfMonth as integer,",
+				"          Month as string,",
+				"          MonthName as string,",
+				"          Quarter as integer,",
+				"          QuarterName as string,",
+				"          Year as string,",
+				"          StandardDate as string,",
+				"          HolidayText as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DimDateDWH",
+				"CasesDB keyGenerate(output(cases_skey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> CasesSkey",
+				"HospitalDB keyGenerate(output(hospital_skey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> HospitalSkey",
+				"TestingDB keyGenerate(output(testing_skey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> TestingSkey",
+				"CasesSkey, HospitalSkey join(CasesDB@reported_date == HospitalDB@reported_date",
+				"     && CasesDB@country == HospitalDB@country,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> CaseHospitalJoin",
+				"TestingSkey, CaseHospitalJoin join(TestingDB@country == CasesDB@country",
+				"     && week_start_date <= CasesDB@reported_date",
+				"     && week_end_date >= CasesDB@reported_date,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'right')~> TestingJoinCaseHospital",
+				"TestingJoinCaseHospital select(mapColumn(",
+				"          hospital_skey,",
+				"          testing_skey,",
+				"          cases_skey,",
+				"          new_cases,",
+				"          tests_done,",
+				"          cases_count,",
+				"          deaths_count,",
+				"          hospital_occupancy_count,",
+				"          icu_occupancy_count,",
+				"          reported_date = CasesDB@reported_date",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FullSelect",
+				"DimDateDWH, TestingJoinCaseHospital join(Date == CasesDB@reported_date,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          DateSK,",
+				"          testing_skey,",
+				"          cases_skey,",
+				"          hospital_skey,",
+				"          new_cases,",
+				"          tests_done,",
+				"          cases_count,",
+				"          deaths_count,",
+				"          hospital_occupancy_count,",
+				"          icu_occupancy_count",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"TestingSkey sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          testing_skey as integer,",
+				"          testing_country as string,",
+				"          testing_country_code_2_digit as string,",
+				"          testing_country_code_3_digit as string,",
+				"          population as long,",
+				"          year_week as string,",
+				"          week_start_date as date,",
+				"          week_end_date as date,",
+				"          testing_data_source as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          testing_skey,",
+				"          testing_country = country,",
+				"          testing_country_code_2_digit = country_code_2_digit,",
+				"          testing_country_code_3_digit = country_code_3_digit,",
+				"          population,",
+				"          week_start_date,",
+				"          week_end_date,",
+				"          testing_data_source",
+				"     )) ~> TestingDWH",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DateSK as integer,",
+				"          cases_skey as integer,",
+				"          hospital_skey as integer,",
+				"          testing_skey as integer,",
+				"          cases_count as long,",
+				"          deaths_count as long,",
+				"          hospital_occupancy_count as long,",
+				"          icu_occupancy_count as long,",
+				"          new_cases as long,",
+				"          tests_done as long",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          DateSK,",
+				"          cases_skey,",
+				"          hospital_skey,",
+				"          testing_skey,",
+				"          cases_count,",
+				"          deaths_count,",
+				"          hospital_occupancy_count,",
+				"          icu_occupancy_count,",
+				"          new_cases,",
+				"          tests_done",
+				"     )) ~> FactsDWH"
+			]
+		}
+	}
+}
