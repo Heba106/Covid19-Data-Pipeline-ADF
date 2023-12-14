@@ -26,9 +26,9 @@ The Data Warehouse stores a refined subset of data specifically tailored for rep
 
 ## Solution Architecture
 
-![Solution Architecture](./images/Solution%20Architecture.png)
-
 Our solution is designed to handle COVID-19 data efficiently, combining various tools and technologies to ensure a seamless process. Let's break down our solution architecture:
+
+![Solution Architecture](./images/Solution%20Architecture.png)
 
 ### Azure Data Factory
 - Serves as our primary tool for data integration and orchestration.
@@ -54,8 +54,9 @@ We've used three transformation technologies:
 
 **Transforming using ADF Data Flow:**
 ADF Data Flow is used to transform the files containing the data of cases and deaths, and the hospital admissions data using the following pipelines:
-- ![Pipeline 1](./images/Pipeline1.png)
-- ![Pipeline 2](./images/Pipeline2.png)
+
+![Pipeline 1](./images/Pipeline1.png)
+![Pipeline 2](./images/Pipeline2.png)
 
 ## Data Orchestration with Azure Data Factory (ADF)
 
@@ -76,8 +77,9 @@ ADF facilitates the creation of triggers, ensuring our pipelines run reliably at
 ### Screenshots - Triggers and Pipeline Runs
 
 In the illustration below, you can see a snapshot of our data orchestration in action. The screenshot depicts the successful daily runs of our pipelines, triggered at consistent intervals:
-- ![Trigger runs](./images/Trigger_runspng.png)
-- ![pipeline runs](./images/Pipeline_runs.png)
+
+![Trigger runs](./images/Trigger_runspng.png)
+![pipeline runs](./images/Pipeline_runs.png)
 
 This visual representation underscores the reliability of our data orchestration setup. Our pipelines consistently execute at designated times, and triggers are efficiently managed, aligning with our data orchestration requirements.
 
@@ -88,6 +90,7 @@ We Used Power BI for reporting trends extracted from our data.
 ### Dashboard
 ![Power BI Dashboard](./images/Dash1.png)
 ![Power BI Dashboard](./images/Dash2.png)
+
 ## Conclusion
 
 This comprehensive solution architecture leverages the strengths of Azure Data Factory, various transformation technologies, and strategic storage solutions to handle COVID-19 data effectively. We've chosen tools based on simplicity, scalability, and compatibility with our specific project requirements.
