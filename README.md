@@ -21,8 +21,8 @@ The Data Warehouse stores a refined subset of data specifically tailored for rep
 - Hospitalization/ICU Cases
 
 ### Data Sources
-- **ECDC Website:** Provides data on confirmed cases, mortality, hospitalization/ICU cases, and testing numbers.
-- **Eurostat Website:** Supplies population data categorized by age group.
+- [**ECDC Website:**](https://www.ecdc.europa.eu/en/covid-19) Provides data on confirmed cases, mortality, hospitalization/ICU cases, and testing numbers.
+- [**Eurostat Website:**](https://ec.europa.eu/eurostat/web/main/home) Supplies population data categorized by age group.
 
 ## Solution Architecture
 
@@ -36,27 +36,52 @@ Our solution is designed to handle COVID-19 data efficiently, combining various 
 - Employs Data Flows for transforming data within the Data Factory.
 - Orchestrates workflows, including running transformations in HDInsight and Azure databases.
 
-### Storage Solutions
+## Storage Solutions
 - **Azure Blob Storage:** Used to Store Eurostat population data.
 - **Azure Data Lake Storage Gen 2:** Azure's recommended solution for building enterprise-level Data Lakes.
 - **Azure Synapse Analytics:** Utilized as a data warehouse solution for our project.
 
-### Data Ingestion
+## Data Ingestion
 Data is ingested from different data sources into our Azure Data Lake Gen2 throughout the following Ingestion Process:
-- We use the HTTP connector within Azure Data Factory to fetch COVID-19 data.
+- We used the HTTP connector within Azure Data Factory to fetch COVID-19 data.
 - Eurostat data is ingested from the Azure storage account into the data lake.
 
-### Data Transformation
+## Data Transformation
 We've used three transformation technologies:
 1. **Data Flow within Data Factory:** For code-free, simple to medium complexity transformations.
 2. **HDInsight:** For more complex transformations requiring code in HiveQL.
 3. **Azure Databricks:** For more complex transformations requiring code in PySpark.
 
-**Transforming using ADF Data Flow:**
+## **Data Flow within Azure Data Factory :**
 ADF Data Flow is used to transform the files containing the data of cases and deaths, and the hospital admissions data using the following pipelines:
 
+### 1. **Transforming Hospital admissions data*
+**Pipeline:**
 ![Pipeline 1](./images/Pipeline1.png)
-![Pipeline 2](./images/Pipeline2.png)
+
+**Transformations:**
+
+![Transformation](./images/P1_tr1.png)
+
+### 2. **Transforming cases and deaths data**
+**Pipeline:**
+![Pipeline 1](./images/Pipeline2.png)
+
+**Transformations:**
+
+![Transformation](./images/P2_tr2.png)
+
+## **Azure Databricks:**
+Databricks is used to trnsform the file containing the population data
+ 
+###  The Following transformations are done on the file: 
+
+
+ ![image](./images/Databricks_tr.png)
+
+Attached File : 
+pyspark_notebooks/transform_population_data.py
+
 
 ## Data Orchestration with Azure Data Factory (ADF)
 
